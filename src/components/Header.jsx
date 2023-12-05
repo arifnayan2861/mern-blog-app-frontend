@@ -1,41 +1,115 @@
-import React from "react";
+import React, { useState } from "react";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+
 import { images } from "../constants";
 
 const navItemsInfo = [
-  { name: "Home" },
-  { name: "Articles" },
-  { name: "Pages" },
-  { name: "Pricing" },
-  { name: "FAQ" },
+  { name: "Home", type: "link" },
+  { name: "Articles", type: "link" },
+  {
+    name: "Pages",
+    type: "dropdown",
+    dropdownPages: ["About Us", "Contact Us"],
+  },
+  { name: "Pricing", type: "link" },
+  { name: "FAQ", type: "link" },
 ];
 
-const NavItem = ({ name }) => {
+const NavItem = ({ item }) => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const toggleDropdownHandler = () => {
+    setIsDropdownVisible((currentState) => {
+      return !currentState;
+    });
+  };
+
   return (
     <li className="relative group">
-      <a href="/" className="px-4 py-2">
-        {name}
-      </a>
-      <span className="text-blue-500 transition-all duration-500 font-bold absolute right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100">
-        /
-      </span>
+      {item.type === "dropdown" ? (
+        <div className="flex flex-col items-center">
+          <button
+            onClick={toggleDropdownHandler}
+            className="px-4 py-2 flex items-center gap-x-1"
+          >
+            {item.name}
+            {isDropdownVisible ? (
+              <MdKeyboardArrowUp />
+            ) : (
+              <MdKeyboardArrowDown />
+            )}
+          </button>
+          <div
+            className={`${
+              isDropdownVisible ? "block" : "hidden"
+            } lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-max`}
+          >
+            <ul className="text-center bg-dark-light lg:bg-transparent flex flex-col shadow-lg rounded-lg overflow-hidden">
+              {item.dropdownPages.map((item) => (
+                <a
+                  href="/"
+                  className="hover:bg-dark-hard hover:text-white px-4 py-2 lg:text-dark-light"
+                >
+                  {item}
+                </a>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <>
+          <a href="/" className="px-4 py-2">
+            {item.name}
+          </a>
+          <span className="text-blue-500 transition-all duration-300 font-black absolute right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100 cursor-pointer">
+            /
+          </span>
+        </>
+      )}
     </li>
   );
 };
 
 const Header = () => {
+  const [isNavVisible, setIsNavVisible] = useState(false);
+
+  const toggleNavbarHandler = () => {
+    setIsNavVisible((currentState) => {
+      return !currentState;
+    });
+  };
+
   return (
     <section>
       <header className="container mx-auto px-5 py-4 flex justify-between items-center">
         <div>
-          <img src={images.Logo} alt="logo" />
+          <img src={images.Logo} alt="logo" className="w-16" />
         </div>
-        <div className="flex gap-x-9 items-center">
-          <ul className="flex gap-x-2 font-semibold">
+        <div className="z-50 lg:hidden">
+          {isNavVisible ? (
+            <AiOutlineClose
+              className="w-6 h-6 cursor-pointer"
+              onClick={toggleNavbarHandler}
+            />
+          ) : (
+            <AiOutlineMenu
+              className="w-6 h-6 cursor-pointer"
+              onClick={toggleNavbarHandler}
+            />
+          )}
+        </div>
+        <div
+          className={`${
+            isNavVisible ? "right-0" : "-right-full"
+          } transition-all duration-500 mt-[56px] lg:mt-0 bg-dark-hard lg:bg-transparent z-49 flex flex-col w-full lg:w-auto justify-center lg:justify-end lg:flex-row fixed top-0 bottom-0 lg:static gap-x-9 items-center`}
+        >
+          <ul className="text-white lg:text-dark-light flex flex-col items-center gap-y-6 lg:flex-row gap-x-2 font-semibold">
             {navItemsInfo.map((item) => (
-              <NavItem key={item.name} name={item.name} />
+              <NavItem key={item.name} item={item} />
             ))}
           </ul>
-          <button className="border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300">
+          <button className="mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300">
             Sign In
           </button>
         </div>
