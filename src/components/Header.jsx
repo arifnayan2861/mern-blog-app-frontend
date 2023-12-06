@@ -46,8 +46,9 @@ const NavItem = ({ item }) => {
             } lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-max`}
           >
             <ul className="text-center bg-dark-light lg:bg-transparent flex flex-col shadow-lg rounded-lg overflow-hidden">
-              {item.dropdownPages.map((item) => (
+              {item.dropdownPages.map((item, index) => (
                 <a
+                  key={index}
                   href="/"
                   className="hover:bg-dark-hard hover:text-white px-4 py-2 lg:text-dark-light"
                 >
