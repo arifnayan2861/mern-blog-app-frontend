@@ -5,6 +5,7 @@ import MainLayout from "../../components/MainLayout";
 import { images } from "../../constants";
 import SuggestedPosts from "./container/SuggestedPosts";
 import CommentsContainer from "../../components/comments/CommentsContainer";
+import SocialShareButtons from "../../components/SocialShareButtons";
 
 const breadCrumbsData = [
   { name: "Home", link: "/" },
@@ -87,13 +88,24 @@ const ArticleDetailPage = () => {
           {/* comment section */}
           <CommentsContainer className="mt-10" loggedInUserId="a" />
         </article>
-        {/* latest posts */}
-        <SuggestedPosts
-          className="mt-8 lg:mt-0 lg:max-w-xs"
-          header="Latest Article"
-          posts={postsData}
-          tags={tagsData}
-        />
+        <div>
+          {/* latest posts */}
+          <SuggestedPosts
+            className="mt-8 lg:mt-0 lg:max-w-xs"
+            header="Latest Article"
+            posts={postsData}
+            tags={tagsData}
+          />
+          <div className="mt-7">
+            <h2 className="font-roboto text-dark-hard font-medium mb-4 md:text-xl">
+              Share on:
+            </h2>
+            <SocialShareButtons
+              url={encodeURI("https://www.facebook.com/arif.nayan28/")}
+              title={encodeURIComponent("Help children get education")}
+            />
+          </div>
+        </div>
       </section>
     </MainLayout>
   );

@@ -42,7 +42,7 @@ const Comment = ({
       />
       {/* name & date of comment */}
       <div className="flex-1 flex flex-col">
-        <h5 className="font-bold text-dark-hard text-xs">
+        <h5 className="font-bold text-dark-hard text-xs lg:text-sm">
           {comment.user.name}
         </h5>
         <span className="text-xs text-dark-soft">
