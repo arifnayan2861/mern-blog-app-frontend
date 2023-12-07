@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
 
 import { images } from "../constants";
+import { logout } from "../store/actions/user";
 
 const navItemsInfo = [
   { name: "Home", type: "link" },
@@ -74,11 +76,18 @@ const NavItem = ({ item }) => {
 
 const Header = () => {
   const [isNavVisible, setIsNavVisible] = useState(false);
+  const userState = useSelector((state) => state.user);
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleNavbarHandler = () => {
     setIsNavVisible((currentState) => {
       return !currentState;
     });
+  };
+
+  const logoutHandler = () => {
+    dispatch(logout());
   };
 
   return (
@@ -110,9 +119,42 @@ const Header = () => {
               <NavItem key={item.name} item={item} />
             ))}
           </ul>
-          <button className="mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300">
-            Sign In
-          </button>
+          {userState.userInfo ? (
+            <div className="text-white lg:text-dark-light flex flex-col items-center gap-y-6 lg:flex-row gap-x-2 font-semibold">
+              <div className="relative group">
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={() => setProfileDropdown(!profileDropdown)}
+                    className="flex items-center gap-x-1 mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300"
+                  >
+                    <span>Profile</span>
+                    <MdKeyboardArrowDown />
+                  </button>
+                  <div
+                    className={`${
+                      profileDropdown ? "block" : "hidden"
+                    } lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-max`}
+                  >
+                    <ul className="text-center bg-dark-light lg:bg-transparent flex flex-col shadow-lg rounded-lg overflow-hidden">
+                      <button className="hover:bg-dark-hard hover:text-white px-4 py-2 lg:text-dark-light">
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={logoutHandler}
+                        className="hover:bg-dark-hard hover:text-white px-4 py-2 lg:text-dark-light"
+                      >
+                        Logout
+                      </button>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <button className="mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300">
+              Sign In
+            </button>
+          )}
         </div>
       </header>
     </section>
