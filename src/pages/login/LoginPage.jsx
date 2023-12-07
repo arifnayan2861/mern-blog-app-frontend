@@ -6,17 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import MainLayout from "../../components/MainLayout";
-import { signup } from "../../services/index/users";
+import { login } from "../../services/index/users";
 import { userActions } from "../../store/reducers/userReducers";
 
-const RegisterPage = () => {
+const LoginPage = () => {
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: ({ name, email, password }) => {
-      return signup({ name, email, password });
+    mutationFn: ({ email, password }) => {
+      return login({ email, password });
     },
     onSuccess: (data) => {
       // console.log(data);
@@ -43,24 +43,19 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
   } = useForm({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
     mode: "onChange",
   });
 
-  const password = watch("password");
-
   // submit handler
   const submitHandler = (data) => {
     // console.log(data);
-    const { name, email, password } = data;
-    mutate({ name, email, password });
+    const { email, password } = data;
+    mutate({ email, password });
   };
 
   return (
@@ -68,40 +63,9 @@ const RegisterPage = () => {
       <section className="container mx-auto px-5 py-10">
         <div className="w-full max-w-sm mx-auto">
           <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard">
-            Sign Up
+            Log In
           </h1>
           <form onSubmit={handleSubmit(submitHandler)}>
-            {/* name */}
-            <div className="flex flex-col mb-6 w-full">
-              <label
-                htmlFor="name"
-                className="text-[#5A7184] font-semibold block"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                placeholder="Enter name"
-                className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
-                // validation
-                {...register("name", {
-                  minLength: {
-                    value: 1,
-                    message: "Name length must be 1 character!",
-                  },
-                  required: {
-                    value: true,
-                    message: "Name is required!",
-                  },
-                })}
-              />
-              {errors.name?.message && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.name?.message}
-                </p>
-              )}
-            </div>
             {/* email */}
             <div className="flex flex-col mb-6 w-full">
               <label
@@ -165,51 +129,26 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
-            {/* confirm password */}
-            <div className="flex flex-col mb-6 w-full">
-              <label
-                htmlFor="confirmPassword"
-                className="text-[#5A7184] font-semibold block"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm password"
-                className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
-                // validation
-                {...register("confirmPassword", {
-                  required: {
-                    value: true,
-                    message: "Please enter the password again!",
-                  },
-                  validate: (value) => {
-                    if (value !== password) {
-                      return "Passwords do not match!";
-                    }
-                  },
-                })}
-              />
-              {errors.confirmPassword?.message && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.confirmPassword?.message}
-                </p>
-              )}
-            </div>
-            {/* register btn */}
+            {/* forget passowrd */}
+            <Link
+              to="/forget-password"
+              className="text-sm font-semibold text-primary"
+            >
+              Forgot password?
+            </Link>
+            {/* login btn */}
             <button
               type="submit"
-              className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={!isValid || isLoading}
             >
-              Register
+              Log In
             </button>
             {/* redirecting to login page */}
             <p className="text-sm font-semibold text-[#5A7184]">
-              Already have an account?{" "}
-              <Link to="/login" className="text-primary">
-                Login now
+              Do not have an account?{" "}
+              <Link to="/register" className="text-primary">
+                Register now
               </Link>
             </p>
           </form>
@@ -219,4 +158,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

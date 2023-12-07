@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { images } from "../constants";
 import { logout } from "../store/actions/user";
@@ -79,6 +80,7 @@ const Header = () => {
   const userState = useSelector((state) => state.user);
   const [profileDropdown, setProfileDropdown] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleNavbarHandler = () => {
     setIsNavVisible((currentState) => {
@@ -151,7 +153,10 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <button className="mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300">
+            <button
+              onClick={() => navigate("/login")}
+              className="mt-6 lg:mt-0 border-2 border-blue-500 text-blue-500 font-semibold rounded-full px-6 py-2 hover:bg-blue-500 hover:text-white transition-all duration-300"
+            >
               Sign In
             </button>
           )}
