@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import Homepage from "./pages/home/Homepage";
 import ArticleDetailPage from "./pages/ArticleDetails/ArticleDetailPage";
@@ -12,6 +13,7 @@ function App() {
         <Route path="/blog/:id" element={<ArticleDetailPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

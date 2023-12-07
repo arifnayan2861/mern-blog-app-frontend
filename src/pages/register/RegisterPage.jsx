@@ -1,9 +1,26 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 import MainLayout from "../../components/MainLayout";
+import { signup } from "../../services/index/users";
 
 const RegisterPage = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: ({ name, email, password }) => {
+      return signup({ name, email, password });
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error);
+    },
+  });
+
+  // useform hook
   const {
     register,
     handleSubmit,
@@ -21,8 +38,11 @@ const RegisterPage = () => {
 
   const password = watch("password");
 
+  // submit handler
   const submitHandler = (data) => {
-    console.log(data);
+    // console.log(data);
+    const { name, email, password } = data;
+    mutate({ name, email, password });
   };
 
   return (
@@ -33,6 +53,7 @@ const RegisterPage = () => {
             Sign Up
           </h1>
           <form onSubmit={handleSubmit(submitHandler)}>
+            {/* name */}
             <div className="flex flex-col mb-6 w-full">
               <label
                 htmlFor="name"
@@ -45,6 +66,7 @@ const RegisterPage = () => {
                 id="name"
                 placeholder="Enter name"
                 className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
+                // validation
                 {...register("name", {
                   minLength: {
                     value: 1,
@@ -62,6 +84,7 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
+            {/* email */}
             <div className="flex flex-col mb-6 w-full">
               <label
                 htmlFor="email"
@@ -74,6 +97,7 @@ const RegisterPage = () => {
                 id="email"
                 placeholder="Enter e-mail"
                 className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
+                // validation
                 {...register("email", {
                   pattern: {
                     value:
@@ -92,6 +116,7 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
+            {/* password */}
             <div className="flex flex-col mb-6 w-full">
               <label
                 htmlFor="password"
@@ -104,6 +129,7 @@ const RegisterPage = () => {
                 id="password"
                 placeholder="Enter password"
                 className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
+                // validation
                 {...register("password", {
                   minLength: {
                     value: 6,
@@ -121,6 +147,7 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
+            {/* confirm password */}
             <div className="flex flex-col mb-6 w-full">
               <label
                 htmlFor="confirmPassword"
@@ -133,6 +160,7 @@ const RegisterPage = () => {
                 id="confirmPassword"
                 placeholder="Confirm password"
                 className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
+                // validation
                 {...register("confirmPassword", {
                   required: {
                     value: true,
@@ -151,19 +179,22 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
+            {/* forget passowrd */}
             <Link
               to="/forget-password"
               className="text-sm font-semibold text-primary"
             >
               Forgot password?
             </Link>
+            {/* register btn */}
             <button
               type="submit"
               className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed"
-              disabled={!isValid}
+              disabled={!isValid || isLoading}
             >
               Register
             </button>
+            {/* redirecting to login page */}
             <p className="text-sm font-semibold text-[#5A7184]">
               Already have an account?{" "}
               <Link to="/login" className="text-primary">
