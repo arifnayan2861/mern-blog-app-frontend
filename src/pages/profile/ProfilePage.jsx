@@ -2,16 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 import MainLayout from "../../components/MainLayout";
-import { getUserProfile } from "../../services/index/users";
+import { getUserProfile, updateProfile } from "../../services/index/users";
 import ProfilePicture from "../../components/ProfilePicture";
+import { userActions } from "../../store/reducers/userReducers";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     data: profileData,
@@ -22,6 +25,29 @@ const ProfilePage = () => {
       return getUserProfile({ token: userState.userInfo.token });
     },
     queryKey: ["profile"],
+  });
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: ({ name, email, password }) => {
+      return updateProfile({
+        token: userState.userInfo.token,
+        userData: { name, email, password },
+      });
+    },
+    onSuccess: (data) => {
+      // console.log(data);
+      dispatch(userActions.setUserInfo(data));
+
+      // saving data in localStorage
+      localStorage.setItem("account", JSON.stringify(data));
+      toast.success("User data is updated!");
+
+      queryClient.invalidateQueries(["profile"]);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error);
+    },
   });
 
   //redirecting if user exists
@@ -50,7 +76,10 @@ const ProfilePage = () => {
   });
 
   // submit handler
-  const submitHandler = (data) => {};
+  const submitHandler = (data) => {
+    const { name, email, password } = data;
+    mutate({ name, email, password });
+  };
 
   return (
     <MainLayout>
@@ -127,24 +156,15 @@ const ProfilePage = () => {
                 htmlFor="password"
                 className="text-[#5A7184] font-semibold block"
               >
-                Password
+                New Password (optional)
               </label>
               <input
                 type="password"
                 id="password"
-                placeholder="Enter password"
+                placeholder="Enter new password"
                 className="italic placeholder:text-[#959EAD] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#C3CAD9]"
                 // validation
-                {...register("password", {
-                  minLength: {
-                    value: 6,
-                    message: "Password must be 6 characters long!",
-                  },
-                  required: {
-                    value: true,
-                    message: "Password is required!",
-                  },
-                })}
+                {...register("password")}
               />
               {errors.password?.message && (
                 <p className="text-red-500 text-xs mt-1">
@@ -158,7 +178,7 @@ const ProfilePage = () => {
               className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={!isValid || profileIsLoading}
             >
-              Register
+              Update
             </button>
           </form>
         </div>
