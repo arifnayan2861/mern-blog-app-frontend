@@ -2,21 +2,24 @@ import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { images } from "../constants";
 import { logout } from "../store/actions/user";
 
 const navItemsInfo = [
-  { name: "Home", type: "link" },
-  { name: "Articles", type: "link" },
+  { name: "Home", type: "link", href: "/" },
+  { name: "Articles", type: "link", href: "/articles" },
   {
     name: "Pages",
     type: "dropdown",
-    dropdownPages: ["About Us", "Contact Us"],
+    dropdownPages: [
+      { title: "About Us", href: "/about" },
+      { title: "Contact Us", href: "/contact" },
+    ],
   },
-  { name: "Pricing", type: "link" },
-  { name: "FAQ", type: "link" },
+  { name: "Pricing", type: "link", href: "/pricing" },
+  { name: "FAQ", type: "link", href: "/faq" },
 ];
 
 const NavItem = ({ item }) => {
@@ -50,22 +53,22 @@ const NavItem = ({ item }) => {
           >
             <ul className="text-center bg-dark-light lg:bg-transparent flex flex-col shadow-lg rounded-lg overflow-hidden">
               {item.dropdownPages.map((item, index) => (
-                <a
+                <Link
                   key={index}
-                  href="/"
+                  to={item.href}
                   className="hover:bg-dark-hard hover:text-white px-4 py-2 lg:text-dark-light"
                 >
-                  {item}
-                </a>
+                  {item.title}
+                </Link>
               ))}
             </ul>
           </div>
         </div>
       ) : (
         <>
-          <a href="/" className="px-4 py-2">
+          <Link to={item.href} className="px-4 py-2">
             {item.name}
-          </a>
+          </Link>
           <span className="text-blue-500 transition-all duration-300 font-black absolute right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100 cursor-pointer">
             /
           </span>
@@ -95,9 +98,9 @@ const Header = () => {
   return (
     <section className="sticky top-0 left-0 right-0 z-50 bg-white">
       <header className="container mx-auto px-5 py-4 flex justify-between items-center">
-        <div>
+        <Link to="/">
           <img src={images.Logo} alt="logo" className="w-16" />
-        </div>
+        </Link>
         <div className="z-50 lg:hidden">
           {isNavVisible ? (
             <AiOutlineClose

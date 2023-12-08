@@ -57,7 +57,7 @@ const CropEasy = ({ photo, setOpenCrop }) => {
       console.log(error);
     }
   };
-  console.log(photo?.width);
+  // console.log(photo?.width);
 
   return (
     <div className="fixed z-[1000] bg-black/50 inset-0 flex justify-center p-5 overflow-auto">
