@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { images, stables } from "../../../constants";
 
 const SuggestedPosts = ({ className, header, posts = [], tags }) => {
+  // console.log(posts);
   return (
     <div
       className={`w-full rounded-lg p-4 shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] ${className}`}
@@ -13,19 +15,23 @@ const SuggestedPosts = ({ className, header, posts = [], tags }) => {
       <div className="grid gap-y-5 mt-5 md:grid-cols-2 md:gap-x-5 lg:grid-cols-1">
         {posts.map((item) => (
           <div
-            key={item._id}
+            key={item?._id}
             className="flex space-x-3 flex-nowrap items-center"
           >
             <img
-              src={item.img}
+              src={
+                item?.image
+                  ? stables.UPLOAD_FOLDER_BASE_URL + item.image
+                  : images.samplePostImage
+              }
               alt={item.title}
               className="aspect-square object-cover rounded-lg w-1/5"
             />
             <div>
               <h3 className="md:text-base font-roboto text-sm text-dark-hard font-medium lg:text-lg">
-                {item.title}
+                <Link to={`/blog/${item.slug}`}>{item.title}</Link>
               </h3>
-              <span className="text-xs opacity-60">{item.createdAt}</span>
+              <span className="text-xs opacity-60">{item?.createdAt}</span>
             </div>
           </div>
         ))}

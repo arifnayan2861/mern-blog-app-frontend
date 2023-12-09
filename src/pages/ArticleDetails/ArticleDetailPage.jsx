@@ -8,6 +8,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Italic from "@tiptap/extension-italic";
 import { generateHTML } from "@tiptap/html";
+import { useSelector } from "react-redux";
 
 import BreadCrumbs from "../../components/BreadCrumbs";
 import MainLayout from "../../components/MainLayout";
@@ -15,37 +16,9 @@ import { images, stables } from "../../constants";
 import SuggestedPosts from "./container/SuggestedPosts";
 import CommentsContainer from "../../components/comments/CommentsContainer";
 import SocialShareButtons from "../../components/SocialShareButtons";
-import { getSinglePost } from "../../services/index/posts";
+import { getSinglePost, getAllPosts } from "../../services/index/posts";
 import ArticleDetailSkeleton from "./components/ArticleDetailSkeleton";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useSelector } from "react-redux";
-
-const postsData = [
-  {
-    _id: "1",
-    img: images.Post1Image,
-    title: "Help Children Get Better",
-    createdAt: "2023-01-12",
-  },
-  {
-    _id: "2",
-    img: images.Post1Image,
-    title: "Help Children Get Better",
-    createdAt: "2023-01-12",
-  },
-  {
-    _id: "3",
-    img: images.Post1Image,
-    title: "Help Children Get Better",
-    createdAt: "2023-01-12",
-  },
-  {
-    _id: "4",
-    img: images.Post1Image,
-    title: "Help Children Get Better",
-    createdAt: "2023-01-12",
-  },
-];
 
 const tagsData = [
   "Medical",
@@ -79,6 +52,11 @@ const ArticleDetailPage = () => {
         )
       );
     },
+  });
+
+  const { data: postsData } = useQuery({
+    queryFn: () => getAllPosts(),
+    queryKey: ["posts"],
   });
 
   return (

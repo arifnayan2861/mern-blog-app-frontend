@@ -21,7 +21,7 @@ const CommentsContainer = ({
   const [affectedComment, setAffectedComment] = useState(null);
   const userState = useSelector((state) => state.user);
   // console.log(comments, mainComments);
-  console.log(userState.userInfo);
+  // console.log(userState.userInfo);
 
   const { mutate: mutateNewComment, isLoading: isLoadingNewComment } =
     useMutation({
