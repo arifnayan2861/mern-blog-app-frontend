@@ -9,7 +9,7 @@ const CommentsContainer = ({ className, loggedInUserId }) => {
   const mainComments = comments.filter((comment) => comment.parent === null);
 
   const [affectedComment, setAffectedComment] = useState(null);
-  console.log(comments, mainComments);
+  // console.log(comments, mainComments);
 
   useEffect(() => {
     (async () => {
