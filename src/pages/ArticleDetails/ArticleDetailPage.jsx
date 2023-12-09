@@ -18,6 +18,7 @@ import SocialShareButtons from "../../components/SocialShareButtons";
 import { getSinglePost } from "../../services/index/posts";
 import ArticleDetailSkeleton from "./components/ArticleDetailSkeleton";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useSelector } from "react-redux";
 
 const postsData = [
   {
@@ -60,6 +61,7 @@ const ArticleDetailPage = () => {
   const { slug } = useParams();
   const [breadCrumbsData, setBreadCrumbsData] = useState([]);
   const [body, setBody] = useState(null);
+  const userState = useSelector((state) => state.user);
 
   const { data, isLoading, isError, error } = useQuery({
     queryFn: () => getSinglePost({ slug }),
@@ -123,7 +125,11 @@ const ArticleDetailPage = () => {
               {body}
             </div>
             {/* comment section */}
-            <CommentsContainer className="mt-10" loggedInUserId="a" />
+            <CommentsContainer
+              className="mt-10"
+              loggedInUserId={userState?.userInfo?._id}
+              comments={data?.comments}
+            />
           </article>
           <div>
             {/* latest posts */}
