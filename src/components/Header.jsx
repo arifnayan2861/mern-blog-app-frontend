@@ -84,7 +84,7 @@ const Header = () => {
   const [profileDropdown, setProfileDropdown] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  // console.log(userState.userInfo);
   const toggleNavbarHandler = () => {
     setIsNavVisible((currentState) => {
       return !currentState;
