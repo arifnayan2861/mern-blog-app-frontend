@@ -5,7 +5,11 @@ import toast from "react-hot-toast";
 
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import { createNewComment, updateComment } from "../../services/index/comments";
+import {
+  createNewComment,
+  updateComment,
+  deleteComment,
+} from "../../services/index/comments";
 
 const CommentsContainer = ({
   className,
@@ -49,6 +53,20 @@ const CommentsContainer = ({
     },
   });
 
+  const { mutate: mutateDeleteComment } = useMutation({
+    mutationFn: ({ token, commentId }) => {
+      return deleteComment({ token, commentId });
+    },
+    onSuccess: () => {
+      toast.success("Your comment is deleted successfully!");
+      queryClient.invalidateQueries(["blog", postSlug]);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error);
+    },
+  });
+
   //   add comment functionality
   const addCommentHandler = (value, parent = null, replyOnUser = null) => {
     mutateNewComment({
@@ -72,7 +90,9 @@ const CommentsContainer = ({
   };
 
   //   delete comment functionality
-  const deleteCommentHandler = (commentId) => {};
+  const deleteCommentHandler = (commentId) => {
+    mutateDeleteComment({ token: userState.userInfo.token, commentId });
+  };
 
   return (
     <div className={`${className}`}>
