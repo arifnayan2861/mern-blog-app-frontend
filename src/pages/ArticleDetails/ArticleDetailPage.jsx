@@ -115,7 +115,7 @@ const ArticleDetailPage = () => {
             <SuggestedPosts
               className="mt-8 lg:mt-0 lg:max-w-xs"
               header="Latest Article"
-              posts={postsData}
+              posts={postsData?.data}
               tags={tagsData}
             />
             <div className="mt-7">
