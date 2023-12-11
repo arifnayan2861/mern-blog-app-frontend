@@ -92,12 +92,12 @@ const ArticleDetailPage = () => {
             {/* content */}
             <div className="mt-4 prose prose-sm sm:prose-base">
               {/* <p>{JSON.stringify(body)}</p> */}
-              {body}
-              {/* <div className="w-full">
+              {/* {body} */}
+              <div className="w-full">
                 {!isLoading && !isError && (
                   <Editor content={data?.body} editable={false} />
                 )}
-              </div> */}
+              </div>
             </div>
             {/* comment section */}
             <CommentsContainer
