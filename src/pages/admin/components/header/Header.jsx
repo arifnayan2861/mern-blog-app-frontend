@@ -13,33 +13,6 @@ import NavItem from "./NavItem";
 import NavItemCollapse from "./NavItemCollapse";
 import { createPost } from "../../../../services/index/posts";
 
-const MENU_ITEMS = [
-  {
-    title: "Dashboard",
-    link: "/admin",
-    icon: <AiFillDashboard className="text-xl" />,
-    name: "dashboard",
-    type: "link",
-  },
-  {
-    title: "Comments",
-    link: "/admin/comments",
-    icon: <FaComments className="text-xl" />,
-    name: "comments",
-    type: "link",
-  },
-  {
-    title: "Posts",
-    content: [
-      { title: "New", link: "/admin/posts/new" },
-      { title: "Manage", link: "/admin/posts/manage" },
-    ],
-    icon: <MdDashboard className="text-xl" />,
-    name: "posts",
-    type: "collapse",
-  },
-];
-
 const Header = () => {
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [activeNavName, setActiveNavName] = useState("dashboard");
@@ -59,6 +32,7 @@ const Header = () => {
         queryClient.invalidateQueries(["posts"]);
         toast.success("Post is created, edit that now!");
         navigate(`/admin/posts/manage/edit/${data.slug}`);
+        console.log(data);
       },
       onError: (error) => {
         toast.error(error.message);
@@ -136,7 +110,7 @@ const Header = () => {
                 activeNavName={activeNavName}
                 setActiveNavName={setActiveNavName}
               >
-                <Link to="/admin/posts/manage">Manage all posts</Link>
+                <Link to="/admin/posts/manage">Manage All Posts</Link>
                 <button
                   disabled={isLoadingCreatePost}
                   className="text-start disabled:opacity-60 disabled:cursor-not-allowed"
