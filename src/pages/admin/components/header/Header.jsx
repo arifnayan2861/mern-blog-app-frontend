@@ -32,7 +32,7 @@ const Header = () => {
         queryClient.invalidateQueries(["posts"]);
         toast.success("Post is created, edit that now!");
         navigate(`/admin/posts/manage/edit/${data.slug}`);
-        console.log(data);
+        // console.log(data);
       },
       onError: (error) => {
         toast.error(error.message);
