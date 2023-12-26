@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useWindowSize } from "@uidotdev/usehooks";
 import { AiFillDashboard, AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaComments } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
-import { useWindowSize } from "@uidotdev/usehooks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -14,12 +14,12 @@ import NavItemCollapse from "./NavItemCollapse";
 import { createPost } from "../../../../services/index/posts";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const userState = useSelector((state) => state.user);
+  const queryClient = useQueryClient();
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [activeNavName, setActiveNavName] = useState("dashboard");
   const windowSize = useWindowSize();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const userState = useSelector((state) => state.user);
 
   const { mutate: mutateCreatePost, isLoading: isLoadingCreatePost } =
     useMutation({
@@ -32,7 +32,6 @@ const Header = () => {
         queryClient.invalidateQueries(["posts"]);
         toast.success("Post is created, edit that now!");
         navigate(`/admin/posts/manage/edit/${data.slug}`);
-        // console.log(data);
       },
       onError: (error) => {
         toast.error(error.message);
@@ -86,7 +85,7 @@ const Header = () => {
             <h4 className="mt-10 font-bold text-[#C7C7C7]">MAIN MENU</h4>
             {/* menu items */}
             <div className="mt-6 flex flex-col gap-y-[0.563rem]">
-              <NavItem
+              {/* <NavItem
                 title="Dashboard"
                 link="/admin"
                 icon={<AiFillDashboard className="text-xl" />}
@@ -101,7 +100,7 @@ const Header = () => {
                 name="comments"
                 activeNavName={activeNavName}
                 setActiveNavName={setActiveNavName}
-              />
+              /> */}
 
               <NavItemCollapse
                 title="Posts"
@@ -110,7 +109,7 @@ const Header = () => {
                 activeNavName={activeNavName}
                 setActiveNavName={setActiveNavName}
               >
-                <Link to="/admin/posts/manage">Manage All Posts</Link>
+                {/* <Link to="/admin/posts/manage">Manage all posts</Link> */}
                 <button
                   disabled={isLoadingCreatePost}
                   className="text-start disabled:opacity-60 disabled:cursor-not-allowed"

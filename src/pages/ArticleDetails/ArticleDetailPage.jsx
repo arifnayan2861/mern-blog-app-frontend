@@ -50,6 +50,7 @@ const ArticleDetailPage = () => {
     queryFn: () => getAllPosts(),
     queryKey: ["posts"],
   });
+  console.log(data);
 
   return (
     <MainLayout>
@@ -88,6 +89,9 @@ const ArticleDetailPage = () => {
             {/* blog heading */}
             <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
               {data?.title}
+            </h1>
+            <h1 className="text-md font-medium font-roboto mt-4 text-dark-soft md:text-[26px]">
+              {data?.caption}
             </h1>
             {/* content */}
             <div className="mt-4 prose prose-sm sm:prose-base">

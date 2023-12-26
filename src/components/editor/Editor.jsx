@@ -10,10 +10,9 @@ const Editor = ({ onDataChange, content, editable }) => {
     editorProps: {
       attributes: {
         class:
-          "text-black !prose !dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none m-5 focus:outline-none prose-pre:bg-[#282c34] prose-pre:text-black",
+          "text-black !prose !dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none m-5 focus:outline-none prose-pre:bg-[#282c34] prose-pre:text-[#abb2bf]",
       },
     },
-    // [#abb2bf]
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
       onDataChange(json);
